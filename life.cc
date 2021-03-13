@@ -14,6 +14,52 @@ static void InterruptHandler(int signo) {
     interrupted = true;
 }
 
+int countNeighbors(vector< vector<bool> > &game_state, int x, int y) {
+    int count = 0;
+
+    // top left
+    if (x > 0 && y > 0 && game_state[x-1][y-1]) {
+        count++;
+    }
+
+    // top
+    if (y > 0 && game_state[x][y-1]) {
+        count++;
+    }
+
+    // top right
+    if (x < game_state.size() - 1 && y > 0 && game_state[x+1][y-1]) {
+        count++;
+    }
+
+    // right
+    if (x < game_state.size() - 1 && game_state[x+1][y]) {
+        count++;
+    }
+
+    // bottom right
+    if (x < game_state.size() - 1 && y < game_state[x].size() - 1 && game_state[x+1][y+1]) {
+        count++;
+    }
+
+    // bottom
+    if (y < game_state[x].size() - 1 && game_state[x][y+1]) {
+        count++;
+    }
+
+    // bottom left
+    if (x > 0 && y < game_state[x].size() - 1 && game_state[x-1][y+1]) {
+        count++;
+    }
+
+    // left
+    if (x > 0 && game_state[x-1][y]) {
+        count++;
+    }
+
+    return count;
+}
+
 int main(int argc, char **argv) {
 
     // TODO configurable
@@ -78,50 +124,4 @@ int main(int argc, char **argv) {
     }
 
     delete led_matrix;
-}
-
-int countNeighbors(vector< vector<bool> > &game_state, int x, int y) {
-    int count = 0;
-
-    // top left
-    if (x > 0 && y > 0 && game_state[x-1][y-1]) {
-        count++;
-    }
-
-    // top
-    if (y > 0 && game_state[x][y-1]) {
-        count++;
-    }
-
-    // top right
-    if (x < game_state.size() - 1 && y > 0 && game_state[x+1][y-1]) {
-        count++;
-    }
-
-    // right
-    if (x < game_state.size() - 1 && game_state[x+1][y]) {
-        count++;
-    }
-
-    // bottom right
-    if (x < game_state.size() - 1 && y < game_state[x].size() - 1 && game_state[x+1][y+1]) {
-        count++;
-    }
-
-    // bottom
-    if (y < game_state[x].size() - 1 && game_state[x][y+1]) {
-        count++;
-    }
-
-    // bottom left
-    if (x > 0 && y < game_state[x].size() - 1 && game_state[x-1][y+1]) {
-        count++;
-    }
-
-    // left
-    if (x > 0 && game_state[x-1][y]) {
-        count++;
-    }
-
-    return count;
 }
