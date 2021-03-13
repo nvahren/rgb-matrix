@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <getopt.h>
 
 #include "led-matrix.h"
 
@@ -60,18 +61,30 @@ int countNeighbors(vector< vector<bool> > &game_state, int x, int y) {
     return count;
 }
 
-int main(int argc, char **argv) {
+void usage() {
 
-    // TODO configurable
-    int init_density = 30;
-    int framerate_slowdown = 30;
+}
+
+int main(int argc, char **argv) {
 
     int red = 0;
     int green = 255;
     int blue = 0;
+    int init_density = 30;
+    int framerate_slowdown = 30;
+    char* hardware_mapping = "adafruit-hat";
+
+    static struct option long_opts[] = {
+        {"red", required_argument, &red, 'r'},
+        {"green", required_argument, &green, 'g'},
+        {"blue", required_argument, &blue, 'b'},
+        {"init-density", required_argument, &init_density, 'd'},
+        {"framerate-slowdown", required_argument, &framerate_slowdown, 'b'},
+        {NULL, 0, NULL, 0}
+    };
 
     RGBMatrix::Options matrix_options;
-    matrix_options.hardware_mapping = "adafruit-hat";
+    matrix_options.hardware_mapping = hardware_mapping;
     matrix_options.show_refresh_rate = true;
 
     rgb_matrix::RuntimeOptions runtime_defaults;
