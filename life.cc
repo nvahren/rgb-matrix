@@ -86,12 +86,20 @@ int main(int argc, char **argv) {
     vector< vector<bool> > game_state(led_matrix->width(), vector<bool>(led_matrix->height(), 0));
     vector< vector<bool> > game_state_next(led_matrix->width(), vector<bool>(led_matrix->height(), 0));
 
+    // create initial state
     srand(time(NULL));
-
     for (int x = 0; x < game_state.size(); x++) {
         for (int y = 0; y < game_state[x].size(); y++) {
             game_state[x][y] = rand() % 100 < init_density;
         }
+    }
+
+    cout << "initial state" << endl;
+    for (int x = 0; x < game_state.size(); x++) {
+            for (int y = 0; y < game_state[x].size(); y++) {
+                cout << game_state[x][y];
+            }
+            cout << endl;
     }
 
     rgb_matrix::FrameCanvas *offscreen = led_matrix->CreateFrameCanvas();
@@ -117,6 +125,14 @@ int main(int argc, char **argv) {
                 game_state[x][y] = game_state_next[x][y];
                 offscreen->SetPixel(x, y, red, green, blue);
             }
+        }
+
+        cout << "current state" << endl;
+        for (int x = 0; x < game_state.size(); x++) {
+                for (int y = 0; y < game_state[x].size(); y++) {
+                    cout << game_state[x][y];
+                }
+                cout << endl;
         }
 
         // draw
