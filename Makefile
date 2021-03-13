@@ -1,6 +1,7 @@
 CXX = g++
 CFLAGS=-Wall -O3 -g -Wextra -Wno-unused-parameter
 CXXFLAGS = $(CFLAGS)
+SOURCES=life.cc
 OBJECTS=life.o
 BINARIES=life
 
@@ -16,8 +17,8 @@ $(RGB_LIBRARY):
 
 all: life
 
-debug : $(OBJECTS) $(RGB_LIBRARY)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS) -DDEBUG
+debug : $(SOURCES) $(RGB_LIBRARY)
+	$(CXX) $(CXXFLAGS) $(SOURCES) -o life $(LDFLAGS) -DDEBUG
 
 life : $(OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS)
