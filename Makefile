@@ -14,7 +14,7 @@ RGB_LIB_DISTRIBUTION=matrix
 $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)
 
-all: life.o
+all: life
 
 life : $(OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
