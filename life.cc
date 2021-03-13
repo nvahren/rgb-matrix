@@ -122,8 +122,13 @@ int main(int argc, char **argv) {
         // update state
         for (int x = 0; x < game_state.size(); x++) {
             for (int y = 0; y < game_state[x].size(); y++) {
-                game_state[x][y] = game_state_next[x][y];
-                offscreen->SetPixel(x, y, red, green, blue);
+                bool alive = game_state_next[x][y];
+                game_state[x][y] = alive;
+                if (alive) {
+                    offscreen->SetPixel(x, y, red, green, blue);
+                } else {
+                    offscreen->SetPixel(x, y, 0, 0, 0);
+                }
             }
         }
 
@@ -136,7 +141,7 @@ int main(int argc, char **argv) {
         }
 
         // draw
-        offscreen = led_matrix->SwapOnVSync(offscreen, 20);
+        offscreen = led_matrix->SwapOnVSync(offscreen, 30);
     }
 
     delete led_matrix;
