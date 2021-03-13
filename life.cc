@@ -15,18 +15,15 @@ static void InterruptHandler(int signo) {
 }
 
 int main(int argc, char **argv) {
-    // if (argc != 3) {
-    //     cout << "Usage: ./rgb-matrix [rows] [columns]" << endl;
-    //     exit(EXIT_FAILURE);
-    // }
-    int rows = 32;
-    int cols = 32;
-    // int rows = atoi(argv[0]);
-    // int cols = atoi(argv[1]);
+
+    // TODO configurable
+    int init_density = 30;
+
+    int red = 0;
+    int green = 255;
+    int blue = 0;
 
     RGBMatrix::Options matrix_options;
-    matrix_options.rows = rows;
-    matrix_options.cols = cols;
     matrix_options.hardware_mapping = "adafruit-hat";
     matrix_options.show_refresh_rate = true;
 
@@ -40,24 +37,91 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    int x = 0;
-    int y = 0;
+    vector< vector<bool> > game_state(led_matrix->width(), vector<bool>(led_matrix->height(), 0));
+    vector< vector<bool> > game_state_next(led_matrix->width(), vector<bool>(led_matrix->height(), 0));
+
+    srand(time(NULL));
+
+    for (int x = 0; x < game_state.size(); x++) {
+        for (int y = 0; y < game_state[x].size(); y++) {
+            game_state[x][y] = rand() % 100 < init_density;
+        }
+    }
+
+    rgb_matrix::FrameCanvas *offscreen = led_matrix->CreateFrameCanvas();
     while (true) {
-        rgb_matrix::FrameCanvas *frame_canvas = led_matrix->CreateFrameCanvas();
-        frame_canvas->SetPixel(x, y, 255, 0, 0);
-        x++;
 
-        if (x >= cols) {
-            x = 0;
-            y++;
+        // examine state
+        for (int x = 0; x < game_state.size(); x++) {
+            for (int y = 0; y < game_state[x].size(); y++) {
+                int neighbors = countNeighbors(game_state, x, y);
+                if (game_state[x][y]) {
+                    // alive
+                    game_state_next[x][y] = neighbors == 2 || neighbors == 3;
+                } else {
+                    // dead
+                    game_state_next[x][y] = neighbors == 3;
+                }
+            }
         }
 
-        if (y >= rows) {
-            y = 0;
+        // update state
+        for (int x = 0; x < game_state.size(); x++) {
+            for (int y = 0; y < game_state[x].size(); y++) {
+                game_state[x][y] = game_state_next[x][y];
+                offscreen->SetPixel(x, y, red, green, blue);
+            }
         }
 
-        frame_canvas = led_matrix->SwapOnVSync(frame_canvas, 10);
+        // draw
+        offscreen = led_matrix->SwapOnVSync(offscreen, 20);
     }
 
     delete led_matrix;
+}
+
+int countNeighbors(vector< vector<bool> > &game_state, int x, int y) {
+    int count = 0;
+
+    // top left
+    if (x > 0 && y > 0 && game_state[x-1][y-1]) {
+        count++;
+    }
+
+    // top
+    if (y > 0 && game_state[x][y-1]) {
+        count++;
+    }
+
+    // top right
+    if (x < game_state.size() - 1 && y > 0 && game_state[x+1][y-1]) {
+        count++;
+    }
+
+    // right
+    if (x < game_state.size() - 1 && game_state[x+1][y]) {
+        count++;
+    }
+
+    // bottom right
+    if (x < game_state.size() - 1 && y < game_state[x].size() - 1 && game_state[x+1][y+1]) {
+        count++;
+    }
+
+    // bottom
+    if (y < game_state[x].size() - 1 && game_state[x][y+1]) {
+        count++;
+    }
+
+    // bottom left
+    if (x > 0 && y < game_state[x].size() - 1 && game_state[x-1][y+1]) {
+        count++;
+    }
+
+    // left
+    if (x > 0 && game_state[x-1][y]) {
+        count++;
+    }
+
+    return count;
 }
