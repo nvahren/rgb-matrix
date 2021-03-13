@@ -75,13 +75,21 @@ int main(int argc, char **argv) {
     char* hardware_mapping = "adafruit-hat";
 
     static struct option long_opts[] = {
-        {"red", required_argument, &red, 'r'},
-        {"green", required_argument, &green, 'g'},
-        {"blue", required_argument, &blue, 'b'},
-        {"init-density", required_argument, &init_density, 'd'},
-        {"framerate-slowdown", required_argument, &framerate_slowdown, 'b'},
+        {"red", required_argument, &red, 0},
+        {"green", required_argument, &green, 0},
+        {"blue", required_argument, &blue, 0},
+        {"init-density", required_argument, &init_density, 0},
+        {"framerate-slowdown", required_argument, &framerate_slowdown, 0},
         {NULL, 0, NULL, 0}
     };
+
+    int c, option_index;
+    while (true) {
+    c = getopt_long(argc, argv, "", long_opts, &option_index);
+        if (c == -1) {
+            break;
+        }
+    }
 
     RGBMatrix::Options matrix_options;
     matrix_options.hardware_mapping = hardware_mapping;
