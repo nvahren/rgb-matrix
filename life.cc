@@ -64,6 +64,7 @@ int main(int argc, char **argv) {
 
     // TODO configurable
     int init_density = 30;
+    int framerate_slowdown = 30;
 
     int red = 0;
     int green = 255;
@@ -94,6 +95,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    #ifdef DEBUG
     cout << "initial state" << endl;
     for (int x = 0; x < game_state.size(); x++) {
             for (int y = 0; y < game_state[x].size(); y++) {
@@ -101,6 +103,7 @@ int main(int argc, char **argv) {
             }
             cout << endl;
     }
+    #endif
 
     rgb_matrix::FrameCanvas *offscreen = led_matrix->CreateFrameCanvas();
     while (true) {
@@ -132,6 +135,7 @@ int main(int argc, char **argv) {
             }
         }
 
+        #ifdef DEBUG
         cout << "current state" << endl;
         for (int x = 0; x < game_state.size(); x++) {
                 for (int y = 0; y < game_state[x].size(); y++) {
@@ -139,9 +143,10 @@ int main(int argc, char **argv) {
                 }
                 cout << endl;
         }
+        #endif
 
         // draw
-        offscreen = led_matrix->SwapOnVSync(offscreen, 30);
+        offscreen = led_matrix->SwapOnVSync(offscreen, framerate_slowdown);
     }
 
     delete led_matrix;
