@@ -84,6 +84,7 @@ int main(int argc, char **argv) {
     };
 
     int c, option_index;
+    opterr = 0;
     while (true) {
         c = getopt_long(argc, argv, "", long_opts, &option_index);
         if (c == -1) {
@@ -108,6 +109,7 @@ int main(int argc, char **argv) {
                 break;
         }
     }
+    opterr = 1;
 
     RGBMatrix::Options matrix_options;
     matrix_options.hardware_mapping = hardware_mapping;
@@ -137,10 +139,10 @@ int main(int argc, char **argv) {
     #ifdef DEBUG
     cout << "initial state" << endl;
     for (int x = 0; x < game_state.size(); x++) {
-            for (int y = 0; y < game_state[x].size(); y++) {
-                cout << game_state[x][y];
-            }
-            cout << endl;
+        for (int y = 0; y < game_state[x].size(); y++) {
+            cout << game_state[x][y];
+        }
+        cout << endl;
     }
     #endif
 
@@ -177,10 +179,10 @@ int main(int argc, char **argv) {
         #ifdef DEBUG
         cout << endl << "current state" << endl;
         for (int x = 0; x < game_state.size(); x++) {
-                for (int y = 0; y < game_state[x].size(); y++) {
-                    cout << game_state[x][y];
-                }
-                cout << endl;
+            for (int y = 0; y < game_state[x].size(); y++) {
+                cout << game_state[x][y];
+            }
+            cout << endl;
         }
         #endif
 
