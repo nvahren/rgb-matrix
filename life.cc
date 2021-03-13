@@ -131,8 +131,8 @@ int main(int argc, char **argv) {
     for (int x = 0; x < game_state.size(); x++) {
         for (int y = 0; y < game_state[x].size(); y++) {
             int tst = rand() % 100;
-            cout << tst << " " << init_density << " " << (tst < init_density) << endl;
-            game_state[x][y] = tst < init_density;
+            cout << tst << " " << init_density << " " << (tst < init_density) << " " << x << " " << y << endl;
+            game_state[x][y] = (tst < init_density);
         }
     }
 
