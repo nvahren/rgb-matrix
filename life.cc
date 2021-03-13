@@ -75,24 +75,37 @@ int main(int argc, char **argv) {
     char* hardware_mapping = "adafruit-hat";
 
     static struct option long_opts[] = {
-        {"red", required_argument, &red, 0},
-        {"green", required_argument, &green, 0},
-        {"blue", required_argument, &blue, 0},
-        {"init-density", required_argument, &init_density, 0},
-        {"framerate-slowdown", required_argument, &framerate_slowdown, 0},
+        {"red", required_argument, 0, 'r'},
+        {"green", required_argument, 0, 'g'},
+        {"blue", required_argument, 0, 'b'},
+        {"init-density", required_argument, 0, 'd'},
+        {"framerate-slowdown", required_argument, 0, 's'},
         {NULL, 0, NULL, 0}
     };
 
     int c, option_index;
     while (true) {
         c = getopt_long(argc, argv, "", long_opts, &option_index);
-        if (c == 0) {
-            cout << "red: " << red << endl;
-            cout << "Found option " << long_opts[option_index].name << " with value " << long_opts[option_index].val << endl;
-            cout << "red: " << red << endl;
-        }
         if (c == -1) {
             break;
+        }
+
+        switch (c) {
+            case 'r':
+                red = stoi(optarg);
+                break;
+            case 'g':
+                green = stoi(optarg);
+                break;
+            case 'b':
+                blue = stoi(optarg);
+                break;
+             case 'd':
+                init_density = stoi(optarg);
+                break;
+             case 's':
+                framerate_slowdown = stoi(optarg);
+                break;
         }
     }
 
