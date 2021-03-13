@@ -136,7 +136,7 @@ int main(int argc, char **argv) {
         }
 
         #ifdef DEBUG
-        cout << "current state" << endl;
+        cout << endl << "current state" << endl;
         for (int x = 0; x < game_state.size(); x++) {
                 for (int y = 0; y < game_state[x].size(); y++) {
                     cout << game_state[x][y];
