@@ -15,12 +15,14 @@ static void InterruptHandler(int signo) {
 }
 
 int main(int argc, char **argv) {
-    if (argc != 3) {
-        cout << "Usage: ./rgb-matrix [rows] [columns]" << endl;
-        exit(EXIT_FAILURE);
-    }
-    int rows = atoi(argv[0]);
-    int cols = atoi(argv[1]);
+    // if (argc != 3) {
+    //     cout << "Usage: ./rgb-matrix [rows] [columns]" << endl;
+    //     exit(EXIT_FAILURE);
+    // }
+    int rows = 32;
+    int cols = 32;
+    // int rows = atoi(argv[0]);
+    // int cols = atoi(argv[1]);
 
     RGBMatrix::Options matrix_options;
     matrix_options.rows = rows;
