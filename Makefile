@@ -18,7 +18,7 @@ $(RGB_LIBRARY):
 all: life
 
 debug : $(SOURCES) $(RGB_LIBRARY)
-	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES) -DDEBUG
+	$(CXX) -o life -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES) -DDEBUG
 
 life : $(OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS)
