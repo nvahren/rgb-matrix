@@ -16,8 +16,11 @@ $(RGB_LIBRARY):
 
 all: life
 
+debug : $(OBJECTS) $(RGB_LIBRARY)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS) -DDEBUG
+
 life : $(OBJECTS) $(RGB_LIBRARY)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS)
 
 life.o:
 	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c life.cc
