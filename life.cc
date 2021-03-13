@@ -85,7 +85,12 @@ int main(int argc, char **argv) {
 
     int c, option_index;
     while (true) {
-    c = getopt_long(argc, argv, "", long_opts, &option_index);
+        c = getopt_long(argc, argv, "", long_opts, &option_index);
+        if (c == 0) {
+            cout << "red: " << red << endl;
+            cout << "Found option " << long_opts[option_index].name << " with value " << long_opts[option_index].val << endl;
+            cout << "red: " << red << endl;
+        }
         if (c == -1) {
             break;
         }
