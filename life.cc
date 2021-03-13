@@ -130,7 +130,9 @@ int main(int argc, char **argv) {
     srand(time(NULL));
     for (int x = 0; x < game_state.size(); x++) {
         for (int y = 0; y < game_state[x].size(); y++) {
-            game_state[x][y] = rand() % 100 < init_density;
+            int tst = rand() % 100;
+            cout << tst << " " << init_density << " " << (tst < init_density) << endl;
+            game_state[x][y] = tst < init_density;
         }
     }
 
