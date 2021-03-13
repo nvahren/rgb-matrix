@@ -18,13 +18,15 @@ $(RGB_LIBRARY):
 all: life
 
 debug : $(SOURCES) $(RGB_LIBRARY)
-	$(CXX) $(CXXFLAGS) $(SOURCES) -o life $(LDFLAGS) -DDEBUG
+	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES) -DDEBUG
 
 life : $(OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS)
 
 life.o:
-	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c life.cc
+	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES)
 
 clean:
 	rm -f $(OBJECTS) $(BINARIES)
+
+.PHONY: clean
