@@ -48,7 +48,7 @@ int countNeighbors(vector< vector<bool> > &game_state, int x, int y) {
 int main(int argc, char **argv) {
 
     int red = 0;
-    int green = 255;
+    int green = 128;
     int blue = 0;
     int init_density = 30;
     int framerate_slowdown = 30;
@@ -64,13 +64,10 @@ int main(int argc, char **argv) {
     };
 
     int opt, option_index;
-    opterr = 0;
-    while (true) {
-        opt = getopt_long(argc, argv, "", long_opts, &option_index);
-        if (opt == -1) {
-            break;
-        }
 
+    //
+    opterr = 0;
+    while (opt = getopt_long(argc, argv, "", long_opts, &option_index) > 0) {
         switch (opt) {
             case 'r':
                 red = stoi(optarg);
@@ -107,6 +104,9 @@ int main(int argc, char **argv) {
 
     vector< vector<bool> > game_state(led_matrix->width(), vector<bool>(led_matrix->height(), 0));
     vector< vector<bool> > game_state_next(led_matrix->width(), vector<bool>(led_matrix->height(), 0));
+
+    signal(SIGTERM, InterruptHandler);
+    signal(SIGINT, InterruptHandler);
 
     // create initial state
     srand(time(NULL));
