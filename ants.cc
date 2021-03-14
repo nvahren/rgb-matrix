@@ -159,7 +159,7 @@ int main(int argc, char **argv) {
             cout << "  y:  " << ant.y << endl;
             cout << "  vx: " << ant.vx << endl;
             cout << "  vy: " << ant.vy << endl;
-            cout << "  alive: " << ant.isAlive() << endl;
+            cout << "  alive: " << ant.isAlive(game_state) << endl;
         }
         #endif
 
