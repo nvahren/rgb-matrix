@@ -66,9 +66,14 @@ int main(int argc, char **argv) {
 
     int opt, option_index;
 
-    //
+    // set opterr to ignore unknown options - the LED matrix library also accepts arguments that we don't recognize here
     opterr = 0;
-    while (opt = getopt_long(argc, argv, "", long_opts, &option_index) > 0) {
+    while (true) {
+         opt = getopt_long(argc, argv, "", long_opts, &option_index);
+         if (opt == -1) {
+             break;
+         }
+
         switch (opt) {
             case 'r':
                 red = stoi(optarg);
