@@ -46,7 +46,7 @@ class Ant {
                 return false;
             }
 
-            alive = x < 0 || y < 0 || x > game_state.size() - 1 || y > game_state[0].size() - 1;
+            alive = !(x < 0 || y < 0 || x > game_state.size() - 1 || y > game_state[0].size() - 1);
             if (!alive) {
                 cout << "oof" << endl;
                 cout << "x: " << x << endl;
