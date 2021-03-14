@@ -29,7 +29,7 @@ life : life.o $(RGB_LIBRARY)
 life.o:
 	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c life.cc
 
-ants : life.o $(RGB_LIBRARY)
+ants : ants.o $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) ants.o -o ants $(LDFLAGS)
 
 ants.o:
