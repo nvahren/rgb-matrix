@@ -28,12 +28,26 @@ class Ant {
                 return;
             }
 
-            if (vx != 0) {
-                vy = vx * game_state[x][y];
+            // left
+            if (vx < 0) {
+                vy = game_state[x][y] ? 1 : -1;
                 vx = 0;
-            } else {
-                vx = vy * game_state[x][y];
+
+            // right
+            } else if (vx > 0) {
+                vy = game_state[x][y] ? -1 : 1;
+                vx = 0;
+
+            // up
+            } else if (vy > 0) {
+                vx = game_state[x][y] ? 1 : -1;
                 vy = 0;
+
+            // must be down
+            } else {
+                vx = game_state[x][y] ? -1 : 1;
+                vy = 0;
+
             }
 
             x += vx;
@@ -49,10 +63,6 @@ class Ant {
             alive = !(x < 0 || y < 0 || x > game_state.size() - 1 || y > game_state[0].size() - 1);
             if (!alive) {
                 cout << "oof" << endl;
-                cout << "x: " << x << endl;
-                cout << "y: " << y << endl;
-                cout << "x size: " << game_state.size() - 1 << endl;
-                cout << "y size: " << game_state[0].size() - 1 << endl;
             }
             return alive;
         }
@@ -186,7 +196,7 @@ int main(int argc, char **argv) {
         for (int i = 0; i < ants.size(); i++) {
             Ant ant = ants.at(i);
             if (ant.isAlive(game_state)) {
-                offscreen->SetPixel(ant.x, ant.y, 0, 192, 192);
+                offscreen->SetPixel(ant.x, ant.y, 192, 192, 0);
             }
         }
 
