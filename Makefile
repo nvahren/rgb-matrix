@@ -23,14 +23,14 @@ debug : $(SOURCES) $(RGB_LIBRARY)
 	$(CXX) -o ants.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c ants.cc -DDEBUG
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o ants $(LDFLAGS)
 
-life : $(OBJECTS) $(RGB_LIBRARY)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS)
+life : life.o $(RGB_LIBRARY)
+	$(CXX) $(CXXFLAGS) life.o -o life $(LDFLAGS)
 
 life.o:
 	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c life.cc
 
-ants : $(OBJECTS) $(RGB_LIBRARY)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o ants $(LDFLAGS)
+ants : life.o $(RGB_LIBRARY)
+	$(CXX) $(CXXFLAGS) ants.o -o ants $(LDFLAGS)
 
 ants.o:
 	$(CXX) -o ants.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c ants.cc
