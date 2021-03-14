@@ -19,9 +19,9 @@ all: life ants
 
 debug : $(SOURCES) $(RGB_LIBRARY)
 	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c life.cc -DDEBUG
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) life.o -o life $(LDFLAGS)
 	$(CXX) -o ants.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c ants.cc -DDEBUG
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o ants $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) ants.o -o ants $(LDFLAGS)
 
 life : life.o $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) life.o -o life $(LDFLAGS)
