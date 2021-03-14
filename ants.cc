@@ -110,11 +110,11 @@ int main(int argc, char **argv) {
 
         // put it somewhere near the middle
         ant.x = game_state.size() / 4 + rand() % (game_state.size() / 2);
-        ant.y = ant.x == 0 ? game_state[0].size() / 4 + rand() % (game_state[0].size() / 2) : 0;
+        ant.y = game_state[0].size() / 4 + rand() % (game_state[0].size() / 2);
 
         // give it a random starting direction
         ant.vx = rand() % 3 - 1;
-        ant.vy = rand() % 3 - 1;
+        ant.vy = ant.vx == 0 ? rand() % 3 - 1 : 0;
 
         ants.push_back(ant);
     }
