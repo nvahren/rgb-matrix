@@ -19,50 +19,30 @@ int countNeighbors(vector< vector<bool> > &game_state, int x, int y) {
     int count = 0;
 
     // top left
-    if (x > 0 && y > 0 && game_state[x-1][y-1]) {
-        count++;
-    }
+    count += (x > 0 && y > 0 && game_state[x-1][y-1]);
 
     // top
-    if (y > 0 && game_state[x][y-1]) {
-        count++;
-    }
+    count += (y > 0 && game_state[x][y-1]);
 
     // top right
-    if (x < game_state.size() - 1 && y > 0 && game_state[x+1][y-1]) {
-        count++;
-    }
+    count += (x < game_state.size() - 1 && y > 0 && game_state[x+1][y-1]);
 
     // right
-    if (x < game_state.size() - 1 && game_state[x+1][y]) {
-        count++;
-    }
+    count += (x < game_state.size() - 1 && game_state[x+1][y]);
 
     // bottom right
-    if (x < game_state.size() - 1 && y < game_state[x].size() - 1 && game_state[x+1][y+1]) {
-        count++;
-    }
+    count += (x < game_state.size() - 1 && y < game_state[x].size() - 1 && game_state[x+1][y+1]);
 
     // bottom
-    if (y < game_state[x].size() - 1 && game_state[x][y+1]) {
-        count++;
-    }
+    count += (y < game_state[x].size() - 1 && game_state[x][y+1]);
 
     // bottom left
-    if (x > 0 && y < game_state[x].size() - 1 && game_state[x-1][y+1]) {
-        count++;
-    }
+    count += (x > 0 && y < game_state[x].size() - 1 && game_state[x-1][y+1]);
 
     // left
-    if (x > 0 && game_state[x-1][y]) {
-        count++;
-    }
+    count += (x > 0 && game_state[x-1][y]);
 
     return count;
-}
-
-void usage() {
-
 }
 
 int main(int argc, char **argv) {
