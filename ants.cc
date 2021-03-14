@@ -153,6 +153,7 @@ int main(int argc, char **argv) {
         }
 
         for (int i = 0; i < ants.size(); i++) {
+            Ant ant = ants.at(i);
             cout << "Ant " << i << endl;
             cout << "  x:  " << ant.x << endl;
             cout << "  y:  " << ant.y << endl;
