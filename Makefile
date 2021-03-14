@@ -18,22 +18,22 @@ $(RGB_LIBRARY):
 all: life ants
 
 debug : $(SOURCES) $(RGB_LIBRARY)
-	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES) -DDEBUG
+	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c life.cc -DDEBUG
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS)
-	$(CXX) -o ants.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES) -DDEBUG
+	$(CXX) -o ants.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c ants.cc -DDEBUG
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o ants $(LDFLAGS)
 
 life : $(OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS)
 
 life.o:
-	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES)
+	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c life.cc
 
 ants : $(OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o ants $(LDFLAGS)
 
 ants.o:
-	$(CXX) -o ants.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES)
+	$(CXX) -o ants.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c ants.cc
 
 clean:
 	rm -f $(OBJECTS) $(BINARIES)
