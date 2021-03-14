@@ -1,9 +1,9 @@
 CXX = g++
 CFLAGS=-Wall -O3 -g -Wextra -Wno-unused-parameter
 CXXFLAGS = $(CFLAGS)
-SOURCES=life.cc
-OBJECTS=life.o
-BINARIES=life
+SOURCES=life.cc ants.cc
+OBJECTS=life.o ants.o
+BINARIES=life ants
 
 RGB_LIB_DISTRIBUTION=matrix
 	RGB_INCDIR=$(RGB_LIB_DISTRIBUTION)/include
@@ -15,17 +15,25 @@ RGB_LIB_DISTRIBUTION=matrix
 $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)
 
-all: life
+all: life ants
 
 debug : $(SOURCES) $(RGB_LIBRARY)
 	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES) -DDEBUG
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS)
+	$(CXX) -o ants.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES) -DDEBUG
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o ants $(LDFLAGS)
 
 life : $(OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o life $(LDFLAGS)
 
 life.o:
 	$(CXX) -o life.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES)
+
+ants : $(OBJECTS) $(RGB_LIBRARY)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o ants $(LDFLAGS)
+
+ants.o:
+	$(CXX) -o ants.o -I. -I$(RGB_INCDIR) $(CXXFLAGS) $(LDFLAGS) -c $(SOURCES)
 
 clean:
 	rm -f $(OBJECTS) $(BINARIES)
