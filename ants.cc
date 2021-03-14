@@ -42,6 +42,7 @@ class Ant {
 
         bool isAlive(vector< vector<bool> > &game_state) {
             if (!alive) {
+                cout << "he already dead" << endl;
                 return false;
             }
 
@@ -142,8 +143,10 @@ int main(int argc, char **argv) {
             Ant* ant = &ants.at(i);
             int current_x = ant->x;
             int current_y = ant->y;
-            ant->move(game_state);
-            game_state[current_x][current_y] = !game_state[current_x][current_y];
+            if (ant->isAlive(game_state)) {
+                ant->move(game_state);
+                game_state[current_x][current_y] = !game_state[current_x][current_y];
+            }
         }
 
         #ifdef DEBUG
