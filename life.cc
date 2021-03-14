@@ -1,7 +1,8 @@
+#include <getopt.h>
+#include <iostream>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream>
-#include <getopt.h>
 
 #include "led-matrix.h"
 
