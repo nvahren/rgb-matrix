@@ -83,15 +83,15 @@ int main(int argc, char **argv) {
         {NULL, 0, NULL, 0}
     };
 
-    int c, option_index;
+    int opt, option_index;
     opterr = 0;
     while (true) {
-        c = getopt_long(argc, argv, "", long_opts, &option_index);
-        if (c == -1) {
+        opt = getopt_long(argc, argv, "", long_opts, &option_index);
+        if (opt == -1) {
             break;
         }
 
-        switch (c) {
+        switch (opt) {
             case 'r':
                 red = stoi(optarg);
                 break;
