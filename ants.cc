@@ -101,7 +101,7 @@ int main(int argc, char **argv) {
     }
 
     vector< vector<bool> > game_state(led_matrix->width(), vector<bool>(led_matrix->height(), 0));
-    vector<Ant> ants(num_ants);
+    vector<Ant> ants;
 
     srand(time(NULL));
 
@@ -136,10 +136,10 @@ int main(int argc, char **argv) {
     while (!interrupted) {
 
         for (int i = 0; i < ants.size(); i++) {
-            Ant ant = ants.at(i);
-            int current_x = ant.x;
-            int current_y = ant.y;
-            ant.move(game_state);
+            Ant* ant = &ants.at(i);
+            int current_x = ant->x;
+            int current_y = ant->y;
+            ant->move(game_state);
             game_state[current_x][current_y] = !game_state[current_x][current_y];
         }
 
