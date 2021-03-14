@@ -50,7 +50,7 @@ class Ant {
         }
 
     private:
-        bool alive;
+        bool alive = true;
 
 };
 
