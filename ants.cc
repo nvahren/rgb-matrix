@@ -143,15 +143,24 @@ int main(int argc, char **argv) {
             game_state[current_x][current_y] = !game_state[current_x][current_y];
         }
 
-        // #ifdef DEBUG
-        // cout << endl << "current state" << endl;
-        // for (int x = 0; x < game_state.size(); x++) {
-        //     for (int y = 0; y < game_state[x].size(); y++) {
-        //         cout << game_state[x][y];
-        //     }
-        //     cout << endl;
-        // }
-        // #endif
+        #ifdef DEBUG
+        cout << endl << "current state" << endl;
+        for (int x = 0; x < game_state.size(); x++) {
+            for (int y = 0; y < game_state[x].size(); y++) {
+                cout << game_state[x][y];
+            }
+            cout << endl;
+        }
+
+        for (int i = 0; i < ants.size(); i++) {
+            cout << "Ant " << i << endl;
+            cout << "  x:  " << ant.x << endl;
+            cout << "  y:  " << ant.y << endl;
+            cout << "  vx: " << ant.vx << endl;
+            cout << "  vy: " << ant.vy << endl;
+            cout << "  alive: " << ant.isAlive() << endl;
+        }
+        #endif
 
         for (int x = 0; x < game_state.size(); x++) {
             for (int y = 0; y < game_state[x].size(); y++) {
