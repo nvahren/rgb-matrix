@@ -56,14 +56,10 @@ class Ant {
 
         bool isAlive(vector< vector<bool> > &game_state) {
             if (!alive) {
-                cout << "he already dead" << endl;
                 return false;
             }
 
             alive = !(x < 0 || y < 0 || x > game_state.size() - 1 || y > game_state[0].size() - 1);
-            if (!alive) {
-                cout << "oof" << endl;
-            }
             return alive;
         }
 
@@ -140,19 +136,10 @@ int main(int argc, char **argv) {
     signal(SIGTERM, InterruptHandler);
     signal(SIGINT, InterruptHandler);
 
-    // #ifdef DEBUG
-    // cout << "initial state" << endl;
-    // for (int x = 0; x < game_state.size(); x++) {
-    //     for (int y = 0; y < game_state[x].size(); y++) {
-    //         cout << game_state[x][y];
-    //     }
-    //     cout << endl;
-    // }
-    // #endif
-
     rgb_matrix::FrameCanvas *offscreen = led_matrix->CreateFrameCanvas();
     while (!interrupted) {
 
+        // move ants and flip squares
         for (int i = 0; i < ants.size(); i++) {
             Ant* ant = &ants.at(i);
             int current_x = ant->x;
@@ -183,6 +170,7 @@ int main(int argc, char **argv) {
         }
         #endif
 
+        // draw offscreen then flip
         for (int x = 0; x < game_state.size(); x++) {
             for (int y = 0; y < game_state[x].size(); y++) {
                 if (game_state[x][y]) {
@@ -200,7 +188,6 @@ int main(int argc, char **argv) {
             }
         }
 
-        // draw
         offscreen = led_matrix->SwapOnVSync(offscreen, framerate_slowdown);
     }
 
