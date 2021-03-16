@@ -142,9 +142,9 @@ int main(int argc, char **argv) {
         // move ants and flip squares
         for (int i = 0; i < ants.size(); i++) {
             Ant* ant = &ants.at(i);
-            int current_x = ant->x;
-            int current_y = ant->y;
             if (ant->isAlive(game_state)) {
+                int current_x = ant->x;
+                int current_y = ant->y;
                 ant->move(game_state);
                 game_state[current_x][current_y] = !game_state[current_x][current_y];
             }
@@ -191,4 +191,5 @@ int main(int argc, char **argv) {
         offscreen = led_matrix->SwapOnVSync(offscreen, framerate_slowdown);
     }
 
+    delete led_matrix;
 }
