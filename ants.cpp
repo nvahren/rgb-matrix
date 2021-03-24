@@ -1,8 +1,12 @@
+
+
+#include "ant.h"
+
 #include <getopt.h>
+#include <csignal>
+#include <cstdio>
 #include <iostream>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <random>
 
 #include "led-matrix.h"
 
@@ -13,70 +17,23 @@ using namespace std;
 
 volatile bool interrupted = false;
 static void InterruptHandler(int signo) {
+    cout << "Interrupted: " << signo << endl;
     interrupted = true;
 }
 
-class Ant {
-    public:
-        int x;
-        int y;
-        int vx;
-        int vy;
-
-        void move(vector< vector<bool> > &game_state) {
-            if (!alive) {
-                return;
-            }
-
-            // left
-            if (vx < 0) {
-                vy = game_state[x][y] ? 1 : -1;
-                vx = 0;
-
-            // right
-            } else if (vx > 0) {
-                vy = game_state[x][y] ? -1 : 1;
-                vx = 0;
-
-            // up
-            } else if (vy > 0) {
-                vx = game_state[x][y] ? 1 : -1;
-                vy = 0;
-
-            // must be down
-            } else {
-                vx = game_state[x][y] ? -1 : 1;
-                vy = 0;
-
-            }
-
-            x += vx;
-            y += vy;
-        }
-
-        bool isAlive(vector< vector<bool> > &game_state) {
-            if (!alive) {
-                return false;
-            }
-
-            alive = !(x < 0 || y < 0 || x > game_state.size() - 1 || y > game_state[0].size() - 1);
-            return alive;
-        }
-
-    private:
-        bool alive = true;
-
-};
+void usage() {
+    cout << "TODO" << endl;
+}
 
 int main(int argc, char **argv) {
     int num_ants = 1;
     int framerate_slowdown = 30;
-    char* hardware_mapping = "adafruit-hat";
+    string hardware_mapping = "adafruit-hat";
 
     static struct option long_opts[] = {
-        {"num-ants", required_argument, 0, 'a'},
-        {"framerate-slowdown", required_argument, 0, 's'},
-        {NULL, 0, NULL, 0}
+            {"num-ants", required_argument, nullptr, 'a'},
+            {"framerate-slowdown", required_argument, nullptr, 's'},
+            {nullptr, 0, nullptr, 0}
     };
 
     int opt, option_index;
@@ -84,24 +41,27 @@ int main(int argc, char **argv) {
     // set opterr to ignore unknown options - the LED matrix library also accepts arguments that we don't recognize here
     opterr = 0;
     while (true) {
-         opt = getopt_long(argc, argv, "", long_opts, &option_index);
-         if (opt == -1) {
-             break;
-         }
+        opt = getopt_long(argc, argv, "", long_opts, &option_index);
+        if (opt == -1) {
+            break;
+        }
 
         switch (opt) {
-             case 'a':
+            case 'a':
                 num_ants = stoi(optarg);
                 break;
             case 's':
                 framerate_slowdown = stoi(optarg);
+                break;
+            default:
+                usage();
                 break;
         }
     }
     opterr = 1;
 
     RGBMatrix::Options matrix_options;
-    matrix_options.hardware_mapping = hardware_mapping;
+    matrix_options.hardware_mapping = hardware_mapping.c_str();
     matrix_options.show_refresh_rate = true;
 
     rgb_matrix::RuntimeOptions runtime_defaults;
@@ -109,26 +69,30 @@ int main(int argc, char **argv) {
 
     RGBMatrix *led_matrix = RGBMatrix::CreateFromFlags(&argc, &argv, &matrix_options, &runtime_defaults);
 
-    if (led_matrix == NULL) {
+    if (led_matrix == nullptr) {
         PrintMatrixFlags(stderr, matrix_options, runtime_defaults);
         return 1;
     }
 
-    vector< vector<bool> > game_state(led_matrix->width(), vector<bool>(led_matrix->height(), 0));
+    vector< vector<bool> > game_state(led_matrix->width(), vector<bool>(led_matrix->height(), false));
     vector<Ant> ants;
 
-    srand(time(NULL));
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<int> board_dist(0, game_state.size() / 2);
+    uniform_real_distribution<int> dir_dist(-1, 1);
 
     for (int i = 0; i < num_ants; i++) {
-        Ant ant;
 
         // put it somewhere near the middle
-        ant.x = game_state.size() / 4 + rand() % (game_state.size() / 2);
-        ant.y = game_state[0].size() / 4 + rand() % (game_state[0].size() / 2);
+        int x = (int) game_state.size() / 4 + board_dist(gen);
+        int y = (int) game_state[0].size() / 4 + board_dist(gen);
 
         // give it a random starting direction
-        ant.vx = rand() % 3 - 1;
-        ant.vy = ant.vx == 0 ? rand() % 3 - 1 : 0;
+        int vx = dir_dist(gen);
+        int vy = vx == 0 ? dir_dist(gen) : 0;
+
+        Ant ant(x, y, vx, vy);
 
         ants.push_back(ant);
     }
@@ -140,17 +104,17 @@ int main(int argc, char **argv) {
     while (!interrupted) {
 
         // move ants and flip squares
-        for (int i = 0; i < ants.size(); i++) {
-            Ant* ant = &ants.at(i);
+        for (auto & i : ants) {
+            Ant* ant = &i;
             if (ant->isAlive(game_state)) {
-                int current_x = ant->x;
-                int current_y = ant->y;
+                int current_x = ant->getX();
+                int current_y = ant->getY();
                 ant->move(game_state);
                 game_state[current_x][current_y] = !game_state[current_x][current_y];
             }
         }
 
-        #ifdef DEBUG
+#ifdef DEBUG
         cout << endl << "current state" << endl;
         for (int x = 0; x < game_state.size(); x++) {
             for (int y = 0; y < game_state[x].size(); y++) {
@@ -168,7 +132,7 @@ int main(int argc, char **argv) {
             cout << "  vy: " << ant.vy << endl;
             cout << "  alive: " << ant.isAlive(game_state) << endl;
         }
-        #endif
+#endif
 
         // draw offscreen then flip
         for (int x = 0; x < game_state.size(); x++) {
@@ -181,10 +145,9 @@ int main(int argc, char **argv) {
             }
         }
 
-        for (int i = 0; i < ants.size(); i++) {
-            Ant ant = ants.at(i);
+        for (auto ant : ants) {
             if (ant.isAlive(game_state)) {
-                offscreen->SetPixel(ant.x, ant.y, 192, 192, 0);
+                offscreen->SetPixel(ant.getX(), ant.getY(), 192, 192, 0);
             }
         }
 

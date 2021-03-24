@@ -34,3 +34,7 @@ life
 ants
 
 .vscode
+.DS_Store
+.idea
+build
+cmake-build-debug
