@@ -4,6 +4,7 @@
 #define RGB_MATRIX_GAME_H
 
 #include "color.h"
+#include <vector>
 
 using namespace std;
 

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include "unistd.h"
 
 #include "game.h"
 #include "life/life.h"
