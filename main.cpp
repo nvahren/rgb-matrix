@@ -70,7 +70,7 @@ void drawToTerminal(const vector<vector<Color> > &frame, int framerate_slowdown)
 int main(int argc, char **argv) {
 
     int red = 0;
-    int green = 128; // TODO?
+    int green = 128;
     int blue = 0;
     int rows = 64;
     int cols = 64;
