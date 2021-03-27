@@ -30,8 +30,6 @@
 *.exe
 *.out
 *.app
-life
-ants
 
 .vscode
 .DS_Store
