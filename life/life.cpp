@@ -1,11 +1,13 @@
 
 
-#include <chrono>
+#include <cstdlib>
+#include <ctime>
 
 #include "life.h"
 
-Life::Life(int board_size_x, int board_size_y, Color color) : color(color) {
+Life::Life(int board_size_x, int board_size_y, Color color) {
     this->game_state = vector(board_size_x, vector(board_size_y, false));
+    this->color = color;
 }
 
 int Life::countNeighbors(int x, int y) {

@@ -1,4 +1,6 @@
 
+#include <cstdlib>
+#include <ctime>
 
 #include "ants.h"
 

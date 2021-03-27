@@ -2,6 +2,12 @@
 
 #include "color.h"
 
+Color::Color() {
+    this->red = 0;
+    this->green = 0;
+    this->blue = 0;
+}
+
 Color::Color(int red, int green, int blue) {
     this->red = red;
     this->green = green;
