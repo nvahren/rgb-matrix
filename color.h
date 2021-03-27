@@ -20,6 +20,8 @@ private:
     int red;
     int green;
     int blue;
+
+    friend bool operator==(Color color, Color other);
 };
 
 

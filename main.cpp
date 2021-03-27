@@ -8,6 +8,7 @@
 
 #include "game.h"
 #include "life/life.h"
+#include "ants/ants.h"
 
 #ifndef DEBUG
 #include "ledDraw.h"
@@ -17,11 +18,13 @@ using namespace std;
 
 enum games {
     UNKNOWN,
-    LIFE
+    LIFE,
+    ANTS
 };
 
 games resolveGame(const string &input) {
     if (input == "life") return LIFE;
+    if (input == "ants") return ANTS;
     return UNKNOWN;
 }
 
@@ -39,9 +42,10 @@ void usage() {
 
 void drawToTerminal(const vector<vector<Color> > &frame, int framerate_slowdown) {
     cout << endl << endl;
+    Color off = Color(0, 0, 0);
     for (int x = 0; x < frame.size(); x++) {
         for (int y = 0; y < frame[x].size(); y++) {
-            if (frame[x][y].getGreen() == 0) {
+            if (frame[x][y] == off) {
                 cout << " ";
             } else {
                 cout << "X";
@@ -55,7 +59,7 @@ void drawToTerminal(const vector<vector<Color> > &frame, int framerate_slowdown)
 int main(int argc, char **argv) {
 
     int red = 0;
-    int green = 128;
+    int green = 128; // TODO
     int blue = 0;
     int rows = 64;
     int cols = 64;
@@ -126,6 +130,9 @@ int main(int argc, char **argv) {
     switch (resolveGame(selected_game)) {
         case LIFE:
             game = new Life(cols, rows, Color(red, green, blue));
+            break;
+        case ANTS:
+            game = new Ants(cols, rows);
             break;
         default:
             game = nullptr;
