@@ -2,6 +2,11 @@
 
 #include "ledDraw.h"
 
+using namespace std;
+
+using rgb_matrix::Canvas;
+using rgb_matrix::RGBMatrix;
+
 LedDraw::LedDraw(int rows, int cols, const string &hardware_mapping, int framerate_slowdown, int argc, char **argv) {
     RGBMatrix::Options matrix_options;
     matrix_options.rows = rows;
