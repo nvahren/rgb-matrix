@@ -36,7 +36,18 @@ static void InterruptHandler(int signo) {
 }
 
 void usage() {
-    cout << "TODO" << endl;
+    cout << "Usage: rgb_matrix --game=[game]" << endl;
+    cout << "Games:" << endl;
+    cout << "  life" << endl;
+    cout << "  ants" << endl;
+    cout << "Options:" << endl;
+    cout << "  --red" << endl;
+    cout << "  --green" << endl;
+    cout << "  --blue" << endl;
+    cout << "  --rows" << endl;
+    cout << "  --cols" << endl;
+    cout << "  --init-density" << endl;
+    cout << "  --framerate-slowdown" << endl;
     exit(1);
 }
 
@@ -59,7 +70,7 @@ void drawToTerminal(const vector<vector<Color> > &frame, int framerate_slowdown)
 int main(int argc, char **argv) {
 
     int red = 0;
-    int green = 128; // TODO
+    int green = 128; // TODO?
     int blue = 0;
     int rows = 64;
     int cols = 64;
