@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
     Game *game;
     switch (resolveGame(selected_game)) {
         case LIFE:
-            game = new Life(cols, rows, Color(red, green, blue));
+            game = new Life(cols, rows, Color(red, green, blue), Color(0, 0, 0));
             break;
         case ANTS:
             game = new Ants(cols, rows);

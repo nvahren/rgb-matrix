@@ -4,9 +4,8 @@
 
 #include "life.h"
 
-Life::Life(int board_size_x, int board_size_y, Color color) {
+Life::Life(int board_size_x, int board_size_y, Color color) : color(color) {
     this->game_state = vector(board_size_x, vector(board_size_y, false));
-    this->color = color;
 }
 
 int Life::countNeighbors(int x, int y) {
