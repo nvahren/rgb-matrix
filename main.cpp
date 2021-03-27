@@ -2,7 +2,6 @@
 
 #include <getopt.h>
 #include <csignal>
-#include <cstdio>
 #include <iostream>
 #include <map>
 #include <string>
@@ -10,10 +9,12 @@
 #include "game.h"
 #include "life.h"
 
+#ifndef DEBUG
 #include "led-matrix.h"
 
 using rgb_matrix::Canvas;
 using rgb_matrix::RGBMatrix;
+#endif
 
 using namespace std;
 
@@ -44,7 +45,9 @@ int main(int argc, char **argv) {
     int red = 0;
     int green = 128;
     int blue = 0;
-    int init_density = 30;
+    int rows = 64;
+    int cols = 64;
+    double init_density = 0.3;
     int framerate_slowdown = 30;
     string selected_game;
     string hardware_mapping = "adafruit-hat";
@@ -53,6 +56,8 @@ int main(int argc, char **argv) {
             {"red",                required_argument, nullptr, 'r'},
             {"green",              required_argument, nullptr, 'g'},
             {"blue",               required_argument, nullptr, 'b'},
+            {"rows",               required_argument, nullptr, 'x'},
+            {"cols",               required_argument, nullptr, 'y'},
             {"init-density",       required_argument, nullptr, 'd'},
             {"framerate-slowdown", required_argument, nullptr, 's'},
             {"game",               required_argument, nullptr, 'm'},
@@ -79,8 +84,14 @@ int main(int argc, char **argv) {
             case 'b':
                 blue = stoi(optarg);
                 break;
+            case 'x':
+                rows = stoi(optarg);
+                break;
+            case 'y':
+                cols = stoi(optarg);
+                break;
             case 'd':
-                init_density = stoi(optarg);
+                init_density = stod(optarg);
                 break;
             case 's':
                 framerate_slowdown = stoi(optarg);
@@ -95,7 +106,10 @@ int main(int argc, char **argv) {
     }
     opterr = 1;
 
+#ifndef DEBUG
     RGBMatrix::Options matrix_options;
+    matrix_options.rows = rows;
+    matrix_options.cols = cols;
     matrix_options.hardware_mapping = hardware_mapping.c_str();
     matrix_options.show_refresh_rate = true;
 
@@ -108,6 +122,7 @@ int main(int argc, char **argv) {
         PrintMatrixFlags(stderr, matrix_options, runtime_defaults);
         return 1;
     }
+#endif
 
     signal(SIGTERM, InterruptHandler);
     signal(SIGINT, InterruptHandler);
@@ -115,7 +130,7 @@ int main(int argc, char **argv) {
     Game *game;
     switch (resolveGame(selected_game)) {
         case LIFE:
-            game = new Life(led_matrix->width(), led_matrix->height(), Color(red, green, blue));
+            game = new Life(cols, rows, Color(red, green, blue));
             break;
         default:
             game = nullptr;
@@ -125,13 +140,38 @@ int main(int argc, char **argv) {
 
     game->init(init_density);
 
+#ifndef DEBUG
     rgb_matrix::FrameCanvas *offscreen = led_matrix->CreateFrameCanvas();
+#endif
     while (!interrupted) {
         game->play();
-        game->draw(offscreen);
+        vector<vector<Color> > frame = game->draw();
+#ifndef DEBUG
+        for (auto & x : frame) {
+            for (int y = 0; y < x.size(); y++) {
+                offscreen->SetPixel(x, y, frame[x][y].getRed(), frame[x][y].getGreen(), frame[x][y].getBlue())
+            }
+        }
+#else
+        cout << endl << endl;
+        for (int x = 0; x < frame.size(); x++) {
+            for (int y = 0; y < frame[x].size(); y++) {
+                if (frame[x][y].getGreen() == 0) {
+                    cout << " ";
+                } else {
+                    cout << "X";
+                }
+            }
+            cout << endl;
+        }
+        usleep(framerate_slowdown * 15000);
+#endif
+#ifndef DEBUG
         offscreen = led_matrix->SwapOnVSync(offscreen, framerate_slowdown);
+#endif
     }
-
+#ifndef DEBUG
     delete led_matrix;
+#endif
     return 0;
 }

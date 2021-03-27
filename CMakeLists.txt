@@ -3,9 +3,13 @@ project(rgb_matrix)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -c")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -c")
 
+#if (!DEBUG)
 include_directories(${CMAKE_SOURCE_DIR}/matrix/include)
 link_directories(${CMAKE_SOURCE_DIR}/matrix/lib)
+#else ()
+add_compile_definitions(DEBUG)
+#endif ()
 
 add_executable(rgb_matrix main.cpp ant.cpp ant.h ants.cpp game.h life.cpp life.h color.cpp color.h)

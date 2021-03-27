@@ -14,11 +14,11 @@ class Life : public Game {
 public:
     Life(int board_size_x, int board_size_y, Color color);
 
-    void init(int init_density) override;
+    void init(double init_density) override;
 
     void play() override;
 
-    void draw(rgb_matrix::FrameCanvas *offscreen) override;
+    vector<vector<Color> > draw() override;
 
 private:
     vector<vector<bool>> game_state;

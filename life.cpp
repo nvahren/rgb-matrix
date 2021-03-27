@@ -1,5 +1,7 @@
 
 
+#include <chrono>
+#include <iostream>
 #include <random>
 
 #include "life.h"
@@ -39,29 +41,18 @@ int Life::countNeighbors(int x, int y) {
     return count;
 }
 
-void Life::init(int init_density) {
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_real_distribution<int> dist(0, 100);
+void Life::init(double init_density) {
+    srand(time(0));
 
-    for (auto &x : game_state) {
-        for (auto &&y : x) {
-            y = dist(gen) < init_density;
+    for (int x = 0; x < game_state.size(); x++) {
+        for (int y = 0; y < game_state[x].size(); y++) {
+            game_state[x][y] = ((int) rand() % 100 < init_density * 100);
         }
     }
+
 }
 
 void Life::play() {
-#ifdef DEBUG
-    cout << "initial state" << endl;
-        for (int x = 0; x < game_state.size(); x++) {
-            for (int y = 0; y < game_state[x].size(); y++) {
-                cout << game_state[x][y];
-            }
-            cout << endl;
-        }
-#endif
-
     vector<vector<bool> > game_state_next = game_state;
 
     // examine state
@@ -85,26 +76,15 @@ void Life::play() {
             game_state[x][y] = alive;
         }
     }
-
-#ifdef DEBUG
-    cout << endl << "current state" << endl;
-        for (int x = 0; x < game_state.size(); x++) {
-            for (int y = 0; y < game_state[x].size(); y++) {
-                cout << game_state[x][y];
-            }
-            cout << endl;
-        }
-#endif
 }
 
-void Life::draw(rgb_matrix::FrameCanvas *offscreen) {
+vector<vector<Color> > Life::draw() {
+    vector<vector<Color> > frame(game_state.size(), vector<Color>(game_state[0].size()));
+    Color off = Color(0, 0, 0);
     for (int x = 0; x < game_state.size(); x++) {
         for (int y = 0; y < game_state[x].size(); y++) {
-            if (game_state[x][y]) {
-                offscreen->SetPixel(x, y, color.getRed(), color.getGreen(), color.getBlue());
-            } else {
-                offscreen->SetPixel(x, y, 0, 0, 0);
-            }
+            frame[x][y] = game_state[x][y] ? color : off;
         }
     }
+    return frame;
 }
