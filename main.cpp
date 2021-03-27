@@ -7,13 +7,10 @@
 #include <string>
 
 #include "game.h"
-#include "life.h"
+#include "life/life.h"
 
 #ifndef DEBUG
-#include "led-matrix.h"
-
-using rgb_matrix::Canvas;
-using rgb_matrix::RGBMatrix;
+#include "ledDraw.h"
 #endif
 
 using namespace std;
@@ -38,6 +35,21 @@ static void InterruptHandler(int signo) {
 void usage() {
     cout << "TODO" << endl;
     exit(1);
+}
+
+void drawToTerminal(const vector<vector<Color> > &frame, int framerate_slowdown) {
+    cout << endl << endl;
+    for (int x = 0; x < frame.size(); x++) {
+        for (int y = 0; y < frame[x].size(); y++) {
+            if (frame[x][y].getGreen() == 0) {
+                cout << " ";
+            } else {
+                cout << "X";
+            }
+        }
+        cout << endl;
+    }
+    usleep(framerate_slowdown * 15000);
 }
 
 int main(int argc, char **argv) {
@@ -66,6 +78,7 @@ int main(int argc, char **argv) {
 
     int opt, option_index;
 
+    // TODO remove from argv when we consume arguments here?
     // set opterr to ignore unknown options - the LED matrix library also accepts arguments that we don't recognize here
     opterr = 0;
     while (true) {
@@ -106,24 +119,6 @@ int main(int argc, char **argv) {
     }
     opterr = 1;
 
-#ifndef DEBUG
-    RGBMatrix::Options matrix_options;
-    matrix_options.rows = rows;
-    matrix_options.cols = cols;
-    matrix_options.hardware_mapping = hardware_mapping.c_str();
-    matrix_options.show_refresh_rate = true;
-
-    rgb_matrix::RuntimeOptions runtime_defaults;
-    runtime_defaults.drop_privileges = 1;
-
-    RGBMatrix *led_matrix = RGBMatrix::CreateFromFlags(&argc, &argv, &matrix_options, &runtime_defaults);
-
-    if (led_matrix == nullptr) {
-        PrintMatrixFlags(stderr, matrix_options, runtime_defaults);
-        return 1;
-    }
-#endif
-
     signal(SIGTERM, InterruptHandler);
     signal(SIGINT, InterruptHandler);
 
@@ -141,37 +136,17 @@ int main(int argc, char **argv) {
     game->init(init_density);
 
 #ifndef DEBUG
-    rgb_matrix::FrameCanvas *offscreen = led_matrix->CreateFrameCanvas();
+    LedDraw led = LedDraw(rows, cols, hardware_mapping, framerate_slowdown, argc, argv);
 #endif
+
     while (!interrupted) {
         game->play();
         vector<vector<Color> > frame = game->draw();
-#ifndef DEBUG
-        for (auto & x : frame) {
-            for (int y = 0; y < x.size(); y++) {
-                offscreen->SetPixel(x, y, frame[x][y].getRed(), frame[x][y].getGreen(), frame[x][y].getBlue())
-            }
-        }
+#ifdef DEBUG
+        drawToTerminal(frame, framerate_slowdown);
 #else
-        cout << endl << endl;
-        for (int x = 0; x < frame.size(); x++) {
-            for (int y = 0; y < frame[x].size(); y++) {
-                if (frame[x][y].getGreen() == 0) {
-                    cout << " ";
-                } else {
-                    cout << "X";
-                }
-            }
-            cout << endl;
-        }
-        usleep(framerate_slowdown * 15000);
-#endif
-#ifndef DEBUG
-        offscreen = led_matrix->SwapOnVSync(offscreen, framerate_slowdown);
+        led.draw(frame);
 #endif
     }
-#ifndef DEBUG
-    delete led_matrix;
-#endif
     return 0;
 }
