@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.17)
+project(rgb_matrix)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    add_compile_definitions(DEBUG)
+    add_executable(rgb_matrix main.cpp ants/ant.cpp ants/ant.h ants/ants.cpp ants/ants.h game.h life/life.cpp life/life.h color.cpp color.h)
+else ()
+    add_executable(rgb_matrix main.cpp ants/ant.cpp ants/ant.h ants/ants.cpp ants/ants.h game.h life/life.cpp life/life.h color.cpp color.h ledDraw.cpp ledDraw.h)
+    find_library(RGB_MATRIX_LIB rgbmatrix lib)
+    target_link_libraries(rgb_matrix LINK_PUBLIC ${RGB_MATRIX_LIB} -lpthread)
+endif ()
+target_include_directories(rgb_matrix PUBLIC matrix/include)
