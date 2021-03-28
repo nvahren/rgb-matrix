@@ -21,11 +21,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #file(GLOB_RECURSE RGB_SRC_FILES ${PROJECT_SOURCE_DIR}/matrix/lib/*.cc)
 #file(GLOB_RECURSE RGB_HEADER_FILES ${PROJECT_SOURCE_DIR}/matrix/include/*.h)
 
-add_library(RGB_MATRIX_LIB STATIC ${PROJECT_SOURCE_DIR}/matrix/lib)
-set_target_properties(RGB_MATRIX_LIB PROPERTIES LINKER_LANGUAGE CXX)
+#add_library(RGB_MATRIX_LIB STATIC ${PROJECT_SOURCE_DIR}/matrix/lib/)
+#set_target_properties(RGB_MATRIX_LIB PROPERTIES LINKER_LANGUAGE CXX)
 
 #add_executable(rgb_matrix ${RGB_SRC_FILES} ${RGB_HEADER_FILES} ${RGB_MORE_HEADER_FILES} main.cpp ants/ant.cpp ants/ant.h ants/ants.cpp ants/ants.h game.h life/life.cpp life/life.h color.cpp color.h ledDraw.cpp ledDraw.h)
 add_executable(rgb_matrix main.cpp ants/ant.cpp ants/ant.h ants/ants.cpp ants/ants.h game.h life/life.cpp life/life.h color.cpp color.h ledDraw.cpp ledDraw.h)
-target_link_libraries(rgb_matrix RGB_MATRIX_LIB -lpthread)
+find_library(RGB_MATRIX_LIB librgbmatrix lib)
+target_link_libraries(rgb_matrix LINK_PUBLIC ${RGB_MATRIX_LIB} -lpthread)
 
 #endif ()
