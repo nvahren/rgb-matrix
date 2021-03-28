@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.17)
 project(rgb_matrix)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #if (CMAKE_BUILD_TYPE MATCHES Debug)
 #    add_compile_definitions(DEBUG)
@@ -14,6 +15,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 #add_library(matrix STATIC ${PROJECT_SOURCE_DIR}/matrix/lib)
 #set_target_properties(matrix PROPERTIES LINKER_LANGUAGE CXX)
+
 
 include_directories(${PROJECT_SOURCE_DIR}/matrix/lib)
 include_directories(${PROJECT_SOURCE_DIR}/matrix/include)
