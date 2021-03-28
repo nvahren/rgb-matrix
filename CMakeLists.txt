@@ -26,6 +26,6 @@ find_library(RGB_MATRIX_LIB rgbmatrix)
 
 #add_executable(rgb_matrix ${RGB_SRC_FILES} ${RGB_HEADER_FILES} ${RGB_MORE_HEADER_FILES} main.cpp ants/ant.cpp ants/ant.h ants/ants.cpp ants/ants.h game.h life/life.cpp life/life.h color.cpp color.h ledDraw.cpp ledDraw.h)
 add_executable(rgb_matrix ${RGB_SRC_FILES} ${RGB_HEADER_FILES} main.cpp ants/ant.cpp ants/ant.h ants/ants.cpp ants/ants.h game.h life/life.cpp life/life.h color.cpp color.h ledDraw.cpp ledDraw.h)
-target_link_libraries(rgb_matrix ${RGB_MATRIX_LIB} -lpthread)
+target_link_libraries(rgb_matrix -lpthread)
 
 #endif ()
