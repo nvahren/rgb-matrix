@@ -17,14 +17,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #set_target_properties(matrix PROPERTIES LINKER_LANGUAGE CXX)
 
 
-include_directories(${PROJECT_SOURCE_DIR}/matrix/lib)
-include_directories(${PROJECT_SOURCE_DIR}/matrix/include)
-file(GLOB_RECURSE RGB_SRC_FILES ${PROJECT_SOURCE_DIR}/matrix/lib/*.cc)
-file(GLOB_RECURSE RGB_HEADER_FILES ${PROJECT_SOURCE_DIR}/matrix/include/*.h)
+#include_directories(${PROJECT_SOURCE_DIR}/matrix/lib)
+#include_directories(${PROJECT_SOURCE_DIR}/matrix/include)
+#file(GLOB_RECURSE RGB_SRC_FILES ${PROJECT_SOURCE_DIR}/matrix/lib/*.cc)
+#file(GLOB_RECURSE RGB_HEADER_FILES ${PROJECT_SOURCE_DIR}/matrix/include/*.h)
 
+find_library(RGB_MATRIX_LIB rgbmatrix)
 
 #add_executable(rgb_matrix ${RGB_SRC_FILES} ${RGB_HEADER_FILES} ${RGB_MORE_HEADER_FILES} main.cpp ants/ant.cpp ants/ant.h ants/ants.cpp ants/ants.h game.h life/life.cpp life/life.h color.cpp color.h ledDraw.cpp ledDraw.h)
 add_executable(rgb_matrix ${RGB_SRC_FILES} ${RGB_HEADER_FILES} main.cpp ants/ant.cpp ants/ant.h ants/ants.cpp ants/ants.h game.h life/life.cpp life/life.h color.cpp color.h ledDraw.cpp ledDraw.h)
-target_link_libraries(rgb_matrix -lpthread)
+target_link_libraries(rgb_matrix ${RGB_MATRIX_LIB} -lpthread)
 
 #endif ()
