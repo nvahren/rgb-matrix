@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    add_compile_definitions(DEBUG)
 #    add_executable(rgb_matrix main.cpp ants/ant.cpp ants/ant.h game.h life/life.cpp life/life.h color.cpp color.h ants/ants.cpp ants/ants.h)
 #else ()
-#include_directories(${PROJECT_SOURCE_DIR}/matrix/include)
+include_directories(${PROJECT_SOURCE_DIR}/matrix/include)
 #include_directories(${PROJECT_SOURCE_DIR}/matrix/lib)
 #
 #link_directories(${PROJECT_SOURCE_DIR}/matrix/lib)
