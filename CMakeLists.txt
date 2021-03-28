@@ -23,6 +23,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #file(GLOB_RECURSE RGB_HEADER_FILES ${PROJECT_SOURCE_DIR}/matrix/include/*.h)
 
 find_library(RGB_MATRIX_LIB rgbmatrix)
+if (NOT RGB_MATRIX_LIB)
+    message(FATAL_ERROR "RGB matrix library not found")
+endif ()
 
 #add_executable(rgb_matrix ${RGB_SRC_FILES} ${RGB_HEADER_FILES} ${RGB_MORE_HEADER_FILES} main.cpp ants/ant.cpp ants/ant.h ants/ants.cpp ants/ants.h game.h life/life.cpp life/life.h color.cpp color.h ledDraw.cpp ledDraw.h)
 add_executable(rgb_matrix ${RGB_SRC_FILES} ${RGB_HEADER_FILES} main.cpp ants/ant.cpp ants/ant.h ants/ants.cpp ants/ants.h game.h life/life.cpp life/life.h color.cpp color.h ledDraw.cpp ledDraw.h)
