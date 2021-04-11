@@ -4,12 +4,12 @@
 #include <csignal>
 #include <iostream>
 #include <map>
-#include <string>
 #include "unistd.h"
 
 #include "game.h"
 #include "life/life.h"
 #include "ants/ants.h"
+#include "clock/clock.h"
 
 #ifndef MACOS
 #include "ledDraw.h"
@@ -20,12 +20,14 @@ using namespace std;
 enum games {
     UNKNOWN,
     LIFE,
+    CLOCK,
     ANTS
 };
 
 games resolveGame(const string &input) {
     if (input == "life") return LIFE;
     if (input == "ants") return ANTS;
+    if (input == "clock") return CLOCK;
     return UNKNOWN;
 }
 
@@ -41,6 +43,7 @@ void usage() {
     cout << "Games:" << endl;
     cout << "  life" << endl;
     cout << "  ants" << endl;
+    cout << "  clock" << endl;
     cout << "Options:" << endl;
     cout << "  --red" << endl;
     cout << "  --green" << endl;
@@ -145,6 +148,9 @@ int main(int argc, char **argv) {
             break;
         case ANTS:
             game = new Ants(cols, rows);
+            break;
+        case CLOCK:
+            game = new Clock(cols, rows);
             break;
         default:
             game = nullptr;
