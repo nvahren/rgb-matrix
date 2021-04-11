@@ -25,19 +25,19 @@ void Ant::move(vector<vector<bool> > &game_state) {
     switch (dir) {
         case Direction::LEFT:
             dir = game_state[x][y] ? Direction::UP : Direction::DOWN;
-            x--;
+            dir == Direction::UP ? y++ : y--;
             break;
         case Direction::RIGHT:
             dir = game_state[x][y] ? Direction::DOWN : Direction::UP;
-            x++;
+            dir == Direction::UP ? y++ : y--;
             break;
         case Direction::UP:
             dir = game_state[x][y] ? Direction::RIGHT : Direction::LEFT;
-            y++;
+            dir == Direction::RIGHT ? x++ : x--;
             break;
         case Direction::DOWN:
             dir = game_state[x][y] ? Direction::LEFT : Direction::RIGHT;
-            y--;
+            dir == Direction::RIGHT ? x++ : x--;
             break;
     }
 }
