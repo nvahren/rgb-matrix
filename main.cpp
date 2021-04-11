@@ -11,7 +11,7 @@
 #include "life/life.h"
 #include "ants/ants.h"
 
-#ifndef DEBUG
+#ifndef MACOS
 #include "ledDraw.h"
 #endif
 
@@ -154,14 +154,14 @@ int main(int argc, char **argv) {
 
     game->init(init_density);
 
-#ifndef DEBUG
+#ifndef MACOS
     LedDraw led = LedDraw(rows, cols, hardware_mapping, framerate_slowdown, argc, argv);
 #endif
 
     while (!interrupted) {
         game->play();
         vector<vector<Color> > frame = game->draw();
-#ifdef DEBUG
+#ifdef MACOS
         drawToTerminal(frame, framerate_slowdown);
 #else
         led.draw(frame);
