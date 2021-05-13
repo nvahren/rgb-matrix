@@ -31,7 +31,7 @@ int getOnes(int value) {
     return value % 10;
 }
 
-void Clock::play() {
+void Clock::play(list<pair<char, int> > inputs) {
     time_t t = time(nullptr);
     struct tm *now = localtime(&t);
 

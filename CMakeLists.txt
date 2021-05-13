@@ -16,13 +16,19 @@ set(SOURCES
         life/life.h
         clock/clock.cpp
         clock/clock.h
+        snake/snake.cpp
+        snake/snake.h
         )
+set(PI_ONLY_SOURCES
+        ledDraw.h
+        ledDraw.cpp
+        keyboardInput.cpp)
 
 if (CMAKE_SYSTEM_NAME MATCHES Darwin)
     add_compile_definitions(MACOS)
     add_executable(rgb_matrix ${SOURCES})
 else ()
-    add_executable(rgb_matrix ${SOURCES} ledDraw.cpp ledDraw.h)
+    add_executable(rgb_matrix ${SOURCES} ${PI_ONLY_SOURCES})
     find_library(RGB_MATRIX_LIB rgbmatrix)
     target_link_libraries(rgb_matrix LINK_PUBLIC ${RGB_MATRIX_LIB} -lpthread)
 endif ()

@@ -1,17 +1,15 @@
 
 
-#ifndef RGB_MATRIX_CLOCK_H
-#define RGB_MATRIX_CLOCK_H
-
-#include <vector>
+#ifndef RGB_MATRIX_SNAKE_H
+#define RGB_MATRIX_SNAKE_H
 
 #include "../game.h"
 
 using namespace std;
 
-class Clock : public Game {
+class Snake : public Game {
 public:
-    Clock(int board_size_x, int board_size_y);
+    Snake(int board_size_x, int board_size_y, Color color);
 
     void init(double init_density) override;
 
@@ -21,10 +19,11 @@ public:
 
 private:
     vector<vector<bool>> game_state;
-    int scale;
-    int board_size_x;
-    int board_size_y;
+    int x{};
+    int y{};
+    Direction dir;
+    Color color;
 };
 
 
-#endif //RGB_MATRIX_CLOCK_H
+#endif //RGB_MATRIX_SNAKE_H

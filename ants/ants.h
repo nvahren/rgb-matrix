@@ -15,7 +15,7 @@ public:
 
     void init(double init_density) override;
 
-    void play() override;
+    void play(list<pair<char, int> > inputs) override;
 
     vector<vector<Color> > draw() override;
 

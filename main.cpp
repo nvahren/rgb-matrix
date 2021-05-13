@@ -7,9 +7,11 @@
 #include "unistd.h"
 
 #include "game.h"
+#include "keyboardInput.h"
 #include "life/life.h"
 #include "ants/ants.h"
 #include "clock/clock.h"
+#include "snake/snake.h"
 
 #ifndef MACOS
 #include "ledDraw.h"
@@ -21,13 +23,15 @@ enum games {
     UNKNOWN,
     LIFE,
     CLOCK,
-    ANTS
+    ANTS,
+    SNAKE
 };
 
 games resolveGame(const string &input) {
     if (input == "life") return LIFE;
     if (input == "ants") return ANTS;
     if (input == "clock") return CLOCK;
+    if (input == "snake") return SNAKE;
     return UNKNOWN;
 }
 
@@ -44,6 +48,7 @@ void usage() {
     cout << "  life" << endl;
     cout << "  ants" << endl;
     cout << "  clock" << endl;
+    cout << "  snake" << endl;
     cout << "Options:" << endl;
     cout << "  --red" << endl;
     cout << "  --green" << endl;
@@ -100,6 +105,9 @@ int main(int argc, char **argv) {
     // TODO remove from argv when we consume arguments here?
     // set opterr to ignore unknown options - the LED matrix library also accepts arguments that we don't recognize here
     opterr = 0;
+
+    initializeKeyboardMonitor();
+
     while (true) {
         opt = getopt_long(argc, argv, "", long_opts, &option_index);
         if (opt == -1) {
@@ -152,6 +160,9 @@ int main(int argc, char **argv) {
         case CLOCK:
             game = new Clock(cols, rows);
             break;
+        case SNAKE:
+            game = new Snake(cols, rows, Color(red, green, blue));
+            break;
         default:
             game = nullptr;
             usage();
@@ -165,7 +176,7 @@ int main(int argc, char **argv) {
 #endif
 
     while (!interrupted) {
-        game->play();
+        game->play(getKeyboardInput());
         vector<vector<Color> > frame = game->draw();
 #ifdef MACOS
         drawToTerminal(frame, framerate_slowdown);

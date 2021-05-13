@@ -51,7 +51,7 @@ void Life::init(double init_density) {
 
 }
 
-void Life::play() {
+void Life::play(list<pair<char, int> > inputs) {
     vector<vector<bool> > game_state_next = game_state;
 
     // examine state

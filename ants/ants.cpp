@@ -26,7 +26,7 @@ void Ants::init(double init_density) {
     }
 }
 
-void Ants::play() {
+void Ants::play(list<pair<char, int> > inputs) {
     for (auto &i : ants) {
         Ant *ant = &i;
         if (ant->isAlive(game_state)) {

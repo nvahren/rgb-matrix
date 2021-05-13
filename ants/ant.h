@@ -4,12 +4,9 @@
 #define RGB_MATRIX_ANT_H
 
 #include <vector>
+#include "../game.h"
 
 using namespace std;
-
-enum class Direction {
-    UP, DOWN, LEFT, RIGHT
-};
 
 class Ant {
 public:
