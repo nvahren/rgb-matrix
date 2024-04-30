@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include "unistd.h"
+#include <pigpio.h>
 
 #include "game.h"
 #include "life/life.h"
@@ -158,20 +159,46 @@ int main(int argc, char **argv) {
             break;
     }
 
-    game->init(init_density);
+    if (gpioInitialise() < 0)
+    {
+        cout << "Failed to initialize GPIO library" << endl;
+    }
 
+    gpioSetMode(19, PI_INPUT);
 #ifndef MACOS
-    LedDraw led = LedDraw(rows, cols, hardware_mapping, framerate_slowdown, argc, argv);
+    LedDraw led = LedDraw(rows,
+                          cols,
+                          hardware_mapping,
+                          framerate_slowdown,
+                          argc,
+                          argv);
 #endif
-
+    int reset = 0;
+    int buttonHeld = 0;
     while (!interrupted) {
-        game->play();
-        vector<vector<Color> > frame = game->draw();
+        game->init(init_density);
+        reset = 0;
+
+        while (!reset) {
+            game->play();
+            vector<vector<Color> > frame = game->draw();
 #ifdef MACOS
-        drawToTerminal(frame, framerate_slowdown);
+            drawToTerminal(frame, framerate_slowdown);
 #else
-        led.draw(frame);
+            led.draw(frame);
+            printf("GPIO 19 is level %d\n", gpioRead(19));
+            if (gpioRead(19) > 0) {
+                buttonHeld++;
+            } else {
+                if (buttonHeld > 10) {
+                    // next game
+                } else if (buttonHeld > 0) {
+                    reset = 1;
+                }
+                buttonHeld = 0;
+            }
 #endif
+        }
     }
     return 0;
 }
