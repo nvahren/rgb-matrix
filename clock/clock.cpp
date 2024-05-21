@@ -12,7 +12,7 @@ Clock::Clock(int board_size_x, int board_size_y) {
     this->board_size_y = board_size_y;
 }
 
-void Clock::init(double init_density) {
+void Clock::init() {
     // no-op
 }
 

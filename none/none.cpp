@@ -12,7 +12,7 @@ None::None(int board_size_x, int board_size_y) {
                                  vector<Color>(board_size_y, off));
 }
 
-void None::init(double init_density) {
+void None::init() {
     // no-op
 }
 

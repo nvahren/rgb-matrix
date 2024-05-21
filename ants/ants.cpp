@@ -10,9 +10,9 @@ Ants::Ants(int board_size_x, int board_size_y) {
     squareColor = Color(128, 128, 128);
 }
 
-void Ants::init(double init_density) {
+void Ants::init() {
     srand(time(0));
-    for (int i = 0; i < (int) init_density; i++) {
+    for (int i = 0; i < 1; i++) {
 
         // put it somewhere near the middle
         int x = game_state.size() / 4 + (int) rand() % game_state.size() / 2;

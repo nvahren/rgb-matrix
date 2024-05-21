@@ -28,7 +28,6 @@ int main(int argc, char **argv) {
     int blue = 0;
     int rows = 64;
     int cols = 64;
-    double init_density = 0.3;
     int framerate_slowdown = 30;
     string hardware_mapping = "adafruit-hat";
 
@@ -42,9 +41,6 @@ int main(int argc, char **argv) {
     games.push_back(new Clock(cols, rows));
 
     std::vector<Game *>::iterator currentGame = games.begin();
-    ++currentGame;
-    ++currentGame;
-    ++currentGame;
     Game* game = *currentGame;
 
     if (gpioInitialise() < 0) {
@@ -58,7 +54,7 @@ int main(int argc, char **argv) {
     int reset = 0;
     int buttonHeld = 0;
     while (!interrupted) {
-        game->init(init_density);
+        game->init();
         reset = 0;
 
         while (!reset) {

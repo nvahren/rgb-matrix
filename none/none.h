@@ -11,7 +11,7 @@ class None : public Game {
  public:
   None(int board_size_x, int board_size_y);
 
-  void init(double init_density) override;
+  void init() override;
 
   void play() override;
 
