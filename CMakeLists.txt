@@ -16,7 +16,9 @@ set(SOURCES
         life/life.h
         clock/clock.cpp
         clock/clock.h
-        )
+        none/none.cpp
+        none/none.h
+)
 
 if (CMAKE_SYSTEM_NAME MATCHES Darwin)
     add_compile_definitions(MACOS)

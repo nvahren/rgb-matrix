@@ -1,75 +1,24 @@
 
 
-#include <getopt.h>
 #include <csignal>
 #include <iostream>
-#include <map>
-#include "unistd.h"
 #include <pigpio.h>
 
 #include "game.h"
+#include "none/none.h"
 #include "life/life.h"
 #include "ants/ants.h"
 #include "clock/clock.h"
 
-#ifndef MACOS
 #include "ledDraw.h"
-#endif
 
 using namespace std;
-
-enum games {
-    UNKNOWN,
-    LIFE,
-    CLOCK,
-    ANTS
-};
-
-games resolveGame(const string &input) {
-    if (input == "life") return LIFE;
-    if (input == "ants") return ANTS;
-    if (input == "clock") return CLOCK;
-    return UNKNOWN;
-}
 
 volatile bool interrupted = false;
 
 static void InterruptHandler(int signo) {
     cout << "Interrupted: " << signo << endl;
     interrupted = true;
-}
-
-void usage() {
-    cout << "Usage: rgb_matrix --game=[game]" << endl;
-    cout << "Games:" << endl;
-    cout << "  life" << endl;
-    cout << "  ants" << endl;
-    cout << "  clock" << endl;
-    cout << "Options:" << endl;
-    cout << "  --red" << endl;
-    cout << "  --green" << endl;
-    cout << "  --blue" << endl;
-    cout << "  --rows" << endl;
-    cout << "  --cols" << endl;
-    cout << "  --init-density" << endl;
-    cout << "  --framerate-slowdown" << endl;
-    exit(1);
-}
-
-void drawToTerminal(const vector<vector<Color> > &frame, int framerate_slowdown) {
-    cout << endl << endl;
-    Color off = Color(0, 0, 0);
-    for (int x = 0; x < frame.size(); x++) {
-        for (int y = 0; y < frame[x].size(); y++) {
-            if (frame[x][y] == off) {
-                cout << " ";
-            } else {
-                cout << "X";
-            }
-        }
-        cout << endl;
-    }
-    usleep(framerate_slowdown * 15000);
 }
 
 int main(int argc, char **argv) {
@@ -81,98 +30,31 @@ int main(int argc, char **argv) {
     int cols = 64;
     double init_density = 0.3;
     int framerate_slowdown = 30;
-    string selected_game;
     string hardware_mapping = "adafruit-hat";
-
-    static struct option long_opts[] = {
-            {"red",                required_argument, nullptr, 'r'},
-            {"green",              required_argument, nullptr, 'g'},
-            {"blue",               required_argument, nullptr, 'b'},
-            {"rows",               required_argument, nullptr, 'x'},
-            {"cols",               required_argument, nullptr, 'y'},
-            {"init-density",       required_argument, nullptr, 'd'},
-            {"framerate-slowdown", required_argument, nullptr, 's'},
-            {"game",               required_argument, nullptr, 'm'},
-            {nullptr, 0,                              nullptr, 0}
-    };
-
-    int opt, option_index;
-
-    // TODO remove from argv when we consume arguments here?
-    // set opterr to ignore unknown options - the LED matrix library also accepts arguments that we don't recognize here
-    opterr = 0;
-    while (true) {
-        opt = getopt_long(argc, argv, "", long_opts, &option_index);
-        if (opt == -1) {
-            break;
-        }
-
-        switch (opt) {
-            case 'r':
-                red = stoi(optarg);
-                break;
-            case 'g':
-                green = stoi(optarg);
-                break;
-            case 'b':
-                blue = stoi(optarg);
-                break;
-            case 'x':
-                rows = stoi(optarg);
-                break;
-            case 'y':
-                cols = stoi(optarg);
-                break;
-            case 'd':
-                init_density = stod(optarg);
-                break;
-            case 's':
-                framerate_slowdown = stoi(optarg);
-                break;
-            case 'm':
-                selected_game = optarg;
-                break;
-            default:
-                usage();
-                break;
-        }
-    }
-    opterr = 1;
 
     signal(SIGTERM, InterruptHandler);
     signal(SIGINT, InterruptHandler);
 
-    Game *game;
-    switch (resolveGame(selected_game)) {
-        case LIFE:
-            game = new Life(cols, rows, Color(red, green, blue));
-            break;
-        case ANTS:
-            game = new Ants(cols, rows);
-            break;
-        case CLOCK:
-            game = new Clock(cols, rows);
-            break;
-        default:
-            game = nullptr;
-            usage();
-            break;
-    }
+    std::vector<Game *> games;
+    games.push_back(new None(cols, rows));
+    games.push_back(new Life(cols, rows, Color(red, green, blue)));
+    games.push_back(new Ants(cols, rows));
+    games.push_back(new Clock(cols, rows));
 
-    if (gpioInitialise() < 0)
-    {
+    std::vector<Game *>::iterator currentGame = games.begin();
+    ++currentGame;
+    ++currentGame;
+    ++currentGame;
+    Game* game = *currentGame;
+
+    if (gpioInitialise() < 0) {
         cout << "Failed to initialize GPIO library" << endl;
     }
 
     gpioSetMode(19, PI_INPUT);
-#ifndef MACOS
-    LedDraw led = LedDraw(rows,
-                          cols,
-                          hardware_mapping,
-                          framerate_slowdown,
-                          argc,
-                          argv);
-#endif
+    LedDraw led =
+        LedDraw(rows, cols, hardware_mapping, framerate_slowdown, argc, argv);
+
     int reset = 0;
     int buttonHeld = 0;
     while (!interrupted) {
@@ -182,22 +64,26 @@ int main(int argc, char **argv) {
         while (!reset) {
             game->play();
             vector<vector<Color> > frame = game->draw();
-#ifdef MACOS
-            drawToTerminal(frame, framerate_slowdown);
-#else
+
             led.draw(frame);
-            printf("GPIO 19 is level %d\n", gpioRead(19));
+
             if (gpioRead(19) > 0) {
                 buttonHeld++;
             } else {
-                if (buttonHeld > 10) {
-                    // next game
+                if (buttonHeld > 5) {
+                    if(currentGame != games.end()) {
+                        ++currentGame;
+                    }
+                    if(currentGame == games.end()){
+                        currentGame = games.begin();
+                    }
+                    game = *currentGame;
+                    reset = 1;
                 } else if (buttonHeld > 0) {
                     reset = 1;
                 }
                 buttonHeld = 0;
             }
-#endif
         }
     }
     return 0;
