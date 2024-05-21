@@ -16,7 +16,9 @@ set(SOURCES
         life/life.h
         clock/clock.cpp
         clock/clock.h
-        )
+        none/none.cpp
+        none/none.h
+)
 
 if (CMAKE_SYSTEM_NAME MATCHES Darwin)
     add_compile_definitions(MACOS)
@@ -24,5 +26,5 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
 else ()
     add_executable(rgb_matrix ${SOURCES} ledDraw.cpp ledDraw.h)
     find_library(RGB_MATRIX_LIB rgbmatrix)
-    target_link_libraries(rgb_matrix LINK_PUBLIC ${RGB_MATRIX_LIB} -lpthread)
+    target_link_libraries(rgb_matrix LINK_PUBLIC ${RGB_MATRIX_LIB} -lpthread -lpigpio -lrt)
 endif ()

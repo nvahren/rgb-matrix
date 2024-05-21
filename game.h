@@ -10,7 +10,7 @@ using namespace std;
 
 class Game {
 public:
-    virtual void init(double init_density) = 0;
+    virtual void init() = 0;
 
     virtual void play() = 0;
 

@@ -40,12 +40,12 @@ int Life::countNeighbors(int x, int y) {
     return count;
 }
 
-void Life::init(double init_density) {
+void Life::init() {
     srand(time(0));
 
     for (int x = 0; x < game_state.size(); x++) {
         for (int y = 0; y < game_state[x].size(); y++) {
-            game_state[x][y] = ((int) rand() % 100 < init_density * 100);
+            game_state[x][y] = ((int) rand() % 100 < 0.3 * 100);
         }
     }
 
